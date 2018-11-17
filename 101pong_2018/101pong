@@ -1,0 +1,61 @@
+#!/usr/bin/python3
+##
+## EPITECH PROJECT, 2018
+## pong
+## File description:
+## 101pong project
+##
+
+from sys import *
+from math import *
+import argparse
+
+parser = argparse.ArgumentParser("", "./101pong x0 y0 z0 x1 y1 z1 n") 
+parser.add_argument("x0", type=float, help="ball abscissa at time t - 1")
+parser.add_argument("y0", type=float, help="ball ordinate at time t - 1")
+parser.add_argument("z0", type=float, help="ball altitude at time t - 1")
+parser.add_argument("x1", type=float, help="ball abscissa at time t")
+parser.add_argument("y1", type=float, help="ball ordinate at time t")
+parser.add_argument("z1", type=float, help="ball altitude at time t")
+parser.add_argument("n", type=int, help="time shift (greater than or equal to zero, integer)")
+
+try :
+    args = parser.parse_args()
+except :
+    print("Tu fais vraiment de la merde BITE")
+    exit(84)
+    
+def main():
+    try :       
+        n = int(argv[7])
+        x0, y0, z0 = float(argv[1]), float(argv[2]), float(argv[3])
+        x1, y1, z1 = float(argv[4]), float(argv[5]), float(argv[6])
+        x2, y2, z2 = x1-x0, y1-y0, z1-z0
+        x3, y3, z3 = x1+n*x2, y1+n*y2, z1+n*z2
+        speed = sqrt(x2*x2 + y2*y2 + z2*z2)
+        angle = (180 * (acos(z2 / speed)) / pi) - 90
+    except ValueError:
+        print("Error")
+        exit(84)
+    if (n < 0):
+        print("The value is negative")
+        exit(84)
+    if (angle < 0):
+        angle = angle * -1
+    if (angle > 90):
+        angle = angle / 2
+    print("The velocity vector of the ball is:")
+    print("(%.2f, %.2f, %.2f)" %(x2 , y2 , z2))
+    print("At time t + ",n , ", ","ball coordinates will be:", sep ="")
+    print("(%.2f, %.2f, %.2f)" %(x3 , y3 , z3))
+    if (z1-z0 != 0):
+        if (-z1/(z1-z0) < 0):
+            print("The ball won't reach the bat.")
+            exit(0)
+    if (z1-z0 == 0) and (z1 != 0):
+        print("The ball won't reach the bat.")
+        exit(0)
+    print("The incidence angle is:")
+    print("%.2f" %(angle),"degrees")
+    exit(0)
+main()

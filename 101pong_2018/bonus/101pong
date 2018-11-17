@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2018
+## pong
+## File description:
+## 101pong project
+##
+
+import sys 
+from math import *
+import pygame
+from pygame.locals import *
+
+def main():
+    pygame.init()
+    pygame.display.set_caption("PONG sans PING")
+
+    taille = largeur, hauteur = 768, 576 
+    window = pygame.display.set_mode(taille)
+    clock = pygame.time.Clock()
+    window_rect = window.get_rect() 
+    
+    balle = pygame.Surface((10,10)).convert()
+    balle.fill(pygame.Color("red"))
+    ballerect = balle.get_rect(topleft=(384,288)) 
+    
+    barre_1 = pygame.Surface((10, 135)).convert()
+    barre_1.fill(pygame.Color("green"))
+    barrerect_1 = barre_1.get_rect(topleft=(0,225)) 
+
+    barre_2 = pygame.Surface((10, 135)).convert()
+    barre_2.fill(pygame.Color("green"))
+    barrerect_2 = barre_2.get_rect(topleft=(800,225))
+    
+    window_rect = window.get_rect()
+    vitesse = [35,35]
+    noir = 0, 0, 0
+    continuer = 1
+
+    pygame.display.flip()
+    
+    while continuer:
+        keys = pygame.key.get_pressed()
+        for event in pygame.event.get():  
+            if event.type == QUIT:
+                continuer = 0
+        #Joueurs 1
+        if keys[pygame.K_s]:
+            barrerect_1.move_ip(0,5)
+        if keys[pygame.K_z]:
+            barrerect_1.move_ip(0,-5)
+        barrerect_1.clamp_ip(window_rect)
+
+        #joueur 2
+        if keys[pygame.K_DOWN]:
+            barrerect_2.move_ip(0,5)
+        if keys[pygame.K_UP]:
+            barrerect_2.move_ip(0,-5)
+        barrerect_2.clamp_ip(window_rect)
+
+        #balle
+        ballerect.move_ip(vitesse)
+        if ballerect.left < 0 or ballerect.right > largeur:
+            vitesse[0] = vitesse[0] * -1
+            ballerect.clamp_ip(window_rect) 
+        if ballerect.top < 0 or ballerect.bottom > hauteur:
+            vitesse[1] = vitesse[1] * -1
+            ballerect.clamp_ip(window_rect)
+                    
+        window.fill(noir)
+        window.blit(balle, ballerect)
+        window.blit(barre_1, barrerect_1)
+        window.blit(barre_2, barrerect_2) 
+        pygame.display.flip()
+        clock.tick(60.0)
+main()
